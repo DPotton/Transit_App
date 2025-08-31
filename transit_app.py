@@ -4,8 +4,13 @@ import json
 API_KEY = '2RFzx-wwIqd0j-FpGcum'
 
 class Colors:
-    RED = '\033[91m'
+    YELLOW = '\033[93m'
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    ORANGE = '\033[33m'
+    PINK = '\033[95m'
     END = '\033[0m'
+    BOLD = '\033[1m'
 
 def main():
     # Portage & Main
@@ -15,7 +20,6 @@ def main():
     # Random Distance
     # lat = 50.892
     # lon = -98.153
-    
     
     # U of W (Downtown) 
     # lat = 49.749
@@ -47,18 +51,36 @@ def main():
     stops = data.get('stops', [])
     
     if not stops:
-        print(f"{Colors.RED}No stops found within the specified distance.{Colors.END}")
+        print(f"{Colors.PINK}No stops found within the specified distance.{Colors.END}")
         return
     
     length = len(stops)
-    print(f"Found {length} stops within {distance} meters of ({lat}, {lon}):")
-    for stop in stops:
+    
+    # Title with formatting
+    print(f"\n{Colors.BOLD}{Colors.YELLOW}╔{'═' * 70}╗{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}║{'WINNIPEG TRANSIT STOPS NEARBY':^70}║{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}╠{'═' * 70}╣{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}║ {Colors.CYAN}Location: {Colors.ORANGE}Portage & Main ({lat}, {lon}){Colors.YELLOW}{' ':>28}║{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}║ {Colors.CYAN}Search Radius: {Colors.ORANGE}{distance} meters{Colors.YELLOW}{' ':>45}║{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}║ {Colors.CYAN}Stops Found: {Colors.ORANGE}{length}{Colors.YELLOW}{' ':>50}║{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}╠{'═' * 70}╣{Colors.END}")
+    
+    # Header for stops list
+    print(f"{Colors.BOLD}{Colors.YELLOW}║ {Colors.PURPLE}{'STOP NAME':<50} {Colors.PURPLE}{'STOP ID':<8} {Colors.YELLOW}║{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.YELLOW}╠{'═' * 70}╣{Colors.END}")
+    
+    # List all stops
+    for i, stop in enumerate(stops, 1):
         stop_name = stop.get('name', 'Unknown')
         stop_id = stop.get('key', 'Unknown')
-        print(f"Stop Name: {stop_name}, Stop ID: {stop_id}")
+        
+        # Alternate colors for rows
+        color = Colors.CYAN if i % 2 == 0 else Colors.ORANGE
+        
+        print(f"{Colors.BOLD}{Colors.YELLOW}║ {color}{stop_name:<50} {stop_id:<8} {Colors.YELLOW}║{Colors.END}")
+    
+    # Footer
+    print(f"{Colors.BOLD}{Colors.YELLOW}╚{'═' * 70}╝{Colors.END}\n")
         
 if __name__ == "__main__":
     main()
-
-    
-    
